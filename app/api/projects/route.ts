@@ -11,10 +11,13 @@ export async function GET() {
   try {
     const projects = await listProjects();
     return NextResponse.json({ projects });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to list projects:', error);
     return NextResponse.json(
-      { error: 'Failed to list projects', details: error.message },
+      {
+        error: 'Failed to list projects',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

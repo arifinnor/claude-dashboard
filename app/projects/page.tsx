@@ -3,7 +3,6 @@
 import { AppNav } from '@/components/app-nav';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useEffect, useState } from 'react';
 import { Loader2, Search, FileText, FolderOpen } from 'lucide-react';
@@ -50,8 +49,9 @@ export default function ProjectsPage() {
 
       setProjects(data.projects);
       setFilteredProjects(data.projects);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to load projects');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to load projects';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readProjectClaudeMd, writeProjectClaudeMd, listProjects } from '@/lib/fs';
+import { readProjectClaudeMd, writeProjectClaudeMd } from '@/lib/fs';
 import { validateProjectId } from '@/lib/validation';
 
 export const dynamic = 'force-dynamic';
@@ -31,10 +31,13 @@ export async function GET(
     }
 
     return NextResponse.json({ content, exists: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to read project CLAUDE.md:`, error);
     return NextResponse.json(
-      { error: 'Failed to read project CLAUDE.md', details: error.message },
+      {
+        error: 'Failed to read project CLAUDE.md',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -75,10 +78,13 @@ export async function POST(
       success: true,
       message: 'Project CLAUDE.md saved successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to write project CLAUDE.md:`, error);
     return NextResponse.json(
-      { error: 'Failed to write project CLAUDE.md', details: error.message },
+      {
+        error: 'Failed to write project CLAUDE.md',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

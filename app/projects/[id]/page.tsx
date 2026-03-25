@@ -45,6 +45,7 @@ export default function ProjectDetailPage({
 
   useEffect(() => {
     loadProjectData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
 
   const loadProjectData = async () => {
@@ -83,8 +84,9 @@ export default function ProjectDetailPage({
       }
 
       toast.success('CLAUDE.md saved successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save CLAUDE.md');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to save CLAUDE.md';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -103,8 +105,9 @@ export default function ProjectDetailPage({
       const data = await res.json();
       setMemoryContent(data.content || '');
       setSelectedMemoryFile(filename);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to load memory file');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to load memory file';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -127,8 +130,9 @@ export default function ProjectDetailPage({
       }
 
       toast.success('Memory file saved successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save memory file');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to save memory file';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -158,8 +162,9 @@ export default function ProjectDetailPage({
       setShowNewMemoryDialog(false);
       loadProjectData();
       loadMemoryFile(newMemoryFilename);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to create memory file');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to create memory file';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -187,8 +192,9 @@ export default function ProjectDetailPage({
         setMemoryContent('');
       }
       loadProjectData();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete memory file');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to delete memory file';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -466,7 +472,7 @@ export default function ProjectDetailPage({
             <DialogHeader>
               <DialogTitle>Delete Memory File</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete "{deleteTarget}"? This action cannot be undone.
+                Are you sure you want to delete &quot;{deleteTarget}&quot;? This action cannot be undone.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

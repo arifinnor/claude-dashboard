@@ -10,7 +10,6 @@ import {
   Brain,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,17 +66,17 @@ export function AppNav() {
       {/* Theme Toggle */}
       <div className="border-t p-4">
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="outline" className="w-full justify-start">
-              {theme === 'dark' ? (
-                <Moon className="mr-2 h-4 w-4" />
-              ) : theme === 'light' ? (
-                <Sun className="mr-2 h-4 w-4" />
-              ) : (
-                <Monitor className="mr-2 h-4 w-4" />
-              )}
-              <span className="capitalize">{theme || 'system'}</span>
-            </Button>
+          <DropdownMenuTrigger
+            className="w-full justify-start inline-flex shrink-0 items-center rounded-lg border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            {theme === 'dark' ? (
+              <Moon className="mr-2 h-4 w-4" />
+            ) : theme === 'light' ? (
+              <Sun className="mr-2 h-4 w-4" />
+            ) : (
+              <Monitor className="mr-2 h-4 w-4" />
+            )}
+            <span className="capitalize">{theme || 'system'}</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem onClick={() => setTheme('light')}>

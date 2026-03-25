@@ -40,8 +40,8 @@ export async function readFileSafe(filePath: string): Promise<string | null> {
   try {
     const content = await fs.readFile(filePath, 'utf-8');
     return content;
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return null;
     }
     throw error;
@@ -68,8 +68,8 @@ export async function deleteFileSafe(filePath: string): Promise<boolean> {
   try {
     await fs.unlink(filePath);
     return true;
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return false;
     }
     throw error;
@@ -79,7 +79,7 @@ export async function deleteFileSafe(filePath: string): Promise<boolean> {
 /**
  * Read and parse JSON file
  */
-export async function readJsonFile<T = any>(filePath: string): Promise<T | null> {
+export async function readJsonFile<T = unknown>(filePath: string): Promise<T | null> {
   const content = await readFileSafe(filePath);
   if (!content) return null;
 
@@ -94,7 +94,7 @@ export async function readJsonFile<T = any>(filePath: string): Promise<T | null>
 /**
  * Write JSON file with validation
  */
-export async function writeJsonFile(filePath: string, data: any): Promise<void> {
+export async function writeJsonFile(filePath: string, data: unknown): Promise<void> {
   try {
     const content = JSON.stringify(data, null, 2);
     await writeFileSafe(filePath, content);

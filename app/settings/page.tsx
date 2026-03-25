@@ -64,8 +64,9 @@ export default function SettingsPage() {
       }
 
       toast.success('Settings saved successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save settings');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to save settings';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -94,8 +95,9 @@ export default function SettingsPage() {
       }
 
       toast.success('Local settings saved successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save local settings');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to save local settings';
+      toast.error(message);
     } finally {
       setSaving(false);
     }
@@ -116,8 +118,9 @@ export default function SettingsPage() {
       }
 
       toast.success('CLAUDE.md saved successfully');
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save CLAUDE.md');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to save CLAUDE.md';
+      toast.error(message);
     } finally {
       setSaving(false);
     }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSafe, writeJsonFile, CONFIG_PATHS } from '@/lib/fs';
 import { validateSettings } from '@/lib/validation';
+import { unlink } from 'fs/promises';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,10 +19,13 @@ export async function GET() {
 
     const settings = JSON.parse(content);
     return NextResponse.json({ settings, exists: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to read local settings:', error);
     return NextResponse.json(
-      { error: 'Failed to read local settings', details: error.message },
+      {
+        error: 'Failed to read local settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -58,10 +62,13 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Local settings saved successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to write local settings:', error);
     return NextResponse.json(
-      { error: 'Failed to write local settings', details: error.message },
+      {
+        error: 'Failed to write local settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -73,23 +80,30 @@ export async function POST(request: NextRequest) {
  */
 export async function DELETE() {
   try {
-    const { unlink } = require('fs/promises');
     try {
       await unlink(CONFIG_PATHS.settingsLocal);
-    } catch (error: any) {
-      if (error.code !== 'ENOENT') {
-        throw error;
+    } catch (error: unknown) {
+      if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+        // File doesn't exist, that's fine
+        return NextResponse.json({
+          success: true,
+          message: 'Local settings deleted successfully',
+        });
       }
+      throw error;
     }
 
     return NextResponse.json({
       success: true,
       message: 'Local settings deleted successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to delete local settings:', error);
     return NextResponse.json(
-      { error: 'Failed to delete local settings', details: error.message },
+      {
+        error: 'Failed to delete local settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

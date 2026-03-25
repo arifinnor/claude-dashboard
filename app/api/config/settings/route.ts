@@ -18,10 +18,13 @@ export async function GET() {
 
     const settings = JSON.parse(content);
     return NextResponse.json({ settings, exists: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to read settings:', error);
     return NextResponse.json(
-      { error: 'Failed to read settings', details: error.message },
+      {
+        error: 'Failed to read settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -58,10 +61,13 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Settings saved successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to write settings:', error);
     return NextResponse.json(
-      { error: 'Failed to write settings', details: error.message },
+      {
+        error: 'Failed to write settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

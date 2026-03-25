@@ -27,10 +27,13 @@ export async function GET(
     const files = await getMemoryFiles(id);
 
     return NextResponse.json({ files });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to list memory files for project:`, error);
     return NextResponse.json(
-      { error: 'Failed to list memory files', details: error.message },
+      {
+        error: 'Failed to list memory files',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

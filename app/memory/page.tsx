@@ -64,8 +64,9 @@ export default function MemoryPage() {
 
       setAllMemoryFiles(files);
       setFilteredFiles(files);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to load projects');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to load projects';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

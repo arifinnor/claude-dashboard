@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useFileWatcher } from '@/lib/use-file-watcher';
 import { FileChangeEvent } from '@/lib/watcher';
 import { toast } from 'sonner';

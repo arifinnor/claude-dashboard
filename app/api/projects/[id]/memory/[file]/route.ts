@@ -3,7 +3,6 @@ import {
   readMemoryFile,
   writeMemoryFile,
   deleteMemoryFile,
-  getMemoryFiles,
 } from '@/lib/fs';
 import { validateProjectId, validateMemoryFile } from '@/lib/validation';
 
@@ -48,10 +47,13 @@ export async function GET(
     }
 
     return NextResponse.json({ content, filename: file });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to read memory file:`, error);
     return NextResponse.json(
-      { error: 'Failed to read memory file', details: error.message },
+      {
+        error: 'Failed to read memory file',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -101,10 +103,13 @@ export async function POST(
       success: true,
       message: 'Memory file saved successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to write memory file:`, error);
     return NextResponse.json(
-      { error: 'Failed to write memory file', details: error.message },
+      {
+        error: 'Failed to write memory file',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -152,10 +157,13 @@ export async function DELETE(
       success: true,
       message: 'Memory file deleted successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Failed to delete memory file:`, error);
     return NextResponse.json(
-      { error: 'Failed to delete memory file', details: error.message },
+      {
+        error: 'Failed to delete memory file',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

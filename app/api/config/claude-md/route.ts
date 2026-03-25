@@ -16,10 +16,13 @@ export async function GET() {
     }
 
     return NextResponse.json({ content, exists: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to read CLAUDE.md:', error);
     return NextResponse.json(
-      { error: 'Failed to read CLAUDE.md', details: error.message },
+      {
+        error: 'Failed to read CLAUDE.md',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -47,10 +50,13 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'CLAUDE.md saved successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to write CLAUDE.md:', error);
     return NextResponse.json(
-      { error: 'Failed to write CLAUDE.md', details: error.message },
+      {
+        error: 'Failed to write CLAUDE.md',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
